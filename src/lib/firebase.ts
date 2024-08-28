@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { derived, writable } from "svelte/store";
+import { derived, writable, type Readable } from "svelte/store";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCe73CUHD8CzV9vY5usHi3MMYaudRcsN3I",
     authDomain: "socialytree.firebaseapp.com",
     projectId: "socialytree",
-    storageBucket: "socialytree.appspot.com",
+    storageBucket: "gs://socialytree.appspot.com",
     messagingSenderId: "915246281456",
     appId: "1:915246281456:web:645036f814df0eb1f68835",
     measurementId: "G-HHQYCEP4TB"
@@ -76,7 +76,7 @@ interface UserData {
     links: any[];
 }
 
-export const userData = derived(user, ($user, set) => {
+export const userData: Readable<UserData | null> = derived(user, ($user, set) => {
     if ($user) {
         return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
     } else {
